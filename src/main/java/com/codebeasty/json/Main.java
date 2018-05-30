@@ -40,43 +40,41 @@ public class Main {
         Double[] storeTotal = new Double[0];
         double totalval;
         for (i = 0; i < array.length; i++) {
-            String present = null;
-            List<String> single = new LinkedList<>();
-            present = array[i];
-
-            StringTokenizer st2 = new StringTokenizer(present, ",");
-            while (st2.hasMoreElements()) {
-                single.add(st2.nextToken());
-            }
-            String[] storeline = single.toArray(new String[single.size()]);
+            String first = null;
+            first = array[i];
+            String[] storeline = readFirstline(first);
+//            StringTokenizer st2 = new StringTokenizer(present, ",");
+//            while (st2.hasMoreElements()) {
+//                single.add(st2.nextToken());
+//            }
+//            String[] storeline = single.toArray(new String[single.size()]);
 
             int j = 0;
             totalval = 0;
             for (j = 0; j < storeline.length; j++) {
                 String getval = null;
                 getval = storeline[j];
-                List<String> arr = new LinkedList<>();
-                StringTokenizer st = new StringTokenizer(getval, "-");
-                while (st.hasMoreElements()) {
-                    arr.add(st.nextToken());
-                }
-                String[] getfinalval = arr.toArray(new String[arr.size()]);
-
+                String[] getfinalval = breakLines(getval);
                 int x = 0;
                 Double value = readHTML(getfinalval[0]);
-                double newval;
-                newval = Double.parseDouble(String.valueOf(value));
-                double cal = 0;
-                double q = Double.parseDouble(getfinalval[1]);
-                cal = newval * q;
+                Double cal = gettotal(value,getfinalval[1]);
                 totalval = totalval + cal;
-                cal=0;
+                cal= Double.valueOf(0);
             }
             totArr.add(totalval);
 
             storeTotal = totArr.toArray(new Double[totArr.size()]);
             totalval = 0;
         }
+        String[] arraysorted = sort(storeTotal,array);
+
+            int z=0;
+            for(z=0;z<arraysorted.length;z++)
+                System.out.println(" " + arraysorted[z]);
+            input.close();
+    }
+    public static String[] sort(Double[] storeTotal,String[] array)
+    {
         int x=0;
         int y=0;
         Double temp= Double.valueOf(0);
@@ -98,10 +96,36 @@ public class Main {
             }
         }
 
-            int z=0;
-            for(z=0;z<array.length;z++)
-                System.out.println(" " + array[z]);
-            input.close();
+return array;
+    }
+    public static Double gettotal(Double val, String portfolio)
+    {
+        double newval;
+        newval = Double.parseDouble(String.valueOf(val));
+        double cal = 0;
+        double q = Double.parseDouble(String.valueOf(portfolio));
+        cal = newval * q;
+        return cal;
+    }
+    public static String[] readFirstline(String present)
+    {
+        List<String> single = new LinkedList<>();
+        StringTokenizer st2 = new StringTokenizer(present, ",");
+        while (st2.hasMoreElements()) {
+            single.add(st2.nextToken());
+        }
+        String[] storeline = single.toArray(new String[single.size()]);
+        return storeline;
+    }
+    public static String[] breakLines(String linedata)
+    {
+        List<String> arr = new LinkedList<>();
+        StringTokenizer st = new StringTokenizer(linedata, "-");
+        while (st.hasMoreElements()) {
+            arr.add(st.nextToken());
+        }
+        String[] getfinalval = arr.toArray(new String[arr.size()]);
+        return getfinalval;
     }
     public static Double readHTML(String symbol) throws IOException, URISyntaxException {
         URIBuilder b = new URIBuilder("https://www.alphavantage.co/query");
@@ -146,3 +170,6 @@ public class Main {
     }
 
 }
+
+
+
